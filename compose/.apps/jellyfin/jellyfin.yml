@@ -23,3 +23,4 @@ services:
       - ${MEDIADIR_MUSIC}:/music
       - ${MEDIADIR_TV}:/media/tv
       - ${MEDIADIR_TV}:/tv
+    user: ${PUID}:${PGID}
