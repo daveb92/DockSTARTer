@@ -16,7 +16,7 @@ menu_app_select() {
                     local APPDESCRIPTION
                     APPDESCRIPTION=$(grep --color=never -Po '^# APPDESCRIPTION=\K.*' "${SCRIPTPATH}/compose/.apps/${FILENAME}/${FILENAME}.yml" || echo "! Missing description !")
                     local APPONOFF
-                    if [[ $(run_script 'env_get' "${APPNAME}_ENABLED") == "$(command true)" ]]; then
+                    if [[ $(run_script 'env_get' "${APPNAME}_ENABLED") == true ]]; then
                         APPONOFF="on"
                     else
                         APPONOFF="off"
@@ -28,7 +28,7 @@ menu_app_select() {
     done < <(grep '_ENABLED=' < "${SCRIPTPATH}/compose/.env")
 
     local SELECTEDAPPS
-    if [[ ${CI:-} == "$(command true)" ]] && [[ ${TRAVIS:-} == "$(command true)" ]]; then
+    if [[ ${CI:-} == true ]] && [[ ${TRAVIS:-} == true ]]; then
         SELECTEDAPPS="Cancel"
     else
         SELECTEDAPPS=$(whiptail --fb --clear --title "DockSTARTer" --separate-output --checklist 'Choose which apps you would like to install:\n Use [up], [down], and [space] to select apps, and [tab] to switch to the buttons at the bottom.' 0 0 0 "${APPLIST[@]}" 3>&1 1>&2 2>&3 || echo "Cancel")

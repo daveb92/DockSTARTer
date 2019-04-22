@@ -145,7 +145,7 @@ menu_value_prompt() {
     fi
 
     local SELECTEDVALUE
-    if [[ ${CI:-} == "$(command true)" ]] && [[ ${TRAVIS:-} == "$(command true)" ]]; then
+    if [[ ${CI:-} == true ]] && [[ ${TRAVIS:-} == true ]]; then
         SELECTEDVALUE="Keep Current "
     else
         SELECTEDVALUE=$(whiptail --fb --clear --title "DockSTARTer" --menu "What would you like set for ${SET_VAR}?${VALUEDESCRIPTION:-}" 0 0 0 "${VALUEOPTIONS[@]}" 3>&1 1>&2 2>&3 || echo "Cancel")
@@ -182,7 +182,7 @@ menu_value_prompt() {
     else
         case "${SET_VAR}" in
             *_ENABLED)
-                if [[ ${INPUT} == "$(command true)" ]] || [[ ${INPUT} == "$(command false)" ]]; then
+                if [[ ${INPUT} == true ]] || [[ ${INPUT} == false ]]; then
                     run_script 'env_set' "${SET_VAR}" "${INPUT}"
                 else
                     whiptail --fb --clear --title "DockSTARTer" --msgbox "${INPUT} is not true or false. Please try setting ${SET_VAR} again." 0 0

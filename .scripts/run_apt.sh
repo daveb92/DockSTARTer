@@ -14,7 +14,7 @@ run_apt() {
         python3-cryptography > /dev/null 2>&1 || command true
     info "Updating repositories."
     apt-get -y update > /dev/null 2>&1 || fatal "Failed to get updates from apt."
-    if [[ ${CI:-} != "$(command true)" ]] && [[ ${TRAVIS:-} != "$(command true)" ]]; then
+    if [[ ${CI:-} != true ]] && [[ ${TRAVIS:-} != true ]]; then
         info "Upgrading packages. Please be patient, this can take a while."
         apt-get -y dist-upgrade > /dev/null 2>&1 || fatal "Failed to upgrade packages from apt."
     fi

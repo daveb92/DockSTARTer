@@ -7,7 +7,7 @@ menu_app_vars() {
     local APPVARS
     APPVARS=$(grep -v "^${APPNAME}_ENABLED=" "${SCRIPTPATH}/compose/.env" | grep "^${APPNAME}_")
     if [[ -z ${APPVARS} ]]; then
-        if [[ ${CI:-} == "$(command true)" ]] && [[ ${TRAVIS:-} == "$(command true)" ]]; then
+        if [[ ${CI:-} == true ]] && [[ ${TRAVIS:-} == true ]]; then
             warning "${APPNAME} has no variables to configure."
         else
             whiptail --fb --clear --title "DockSTARTer" --msgbox "${APPNAME} has no variables to configure." 0 0

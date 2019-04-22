@@ -26,7 +26,7 @@ run_yum() {
     curl -fsSL setup.ius.io -o "${GET_IUS}" > /dev/null 2>&1 || fatal "Failed to get IUS install script."
     bash "${GET_IUS}" > /dev/null 2>&1 || warning "Failed to install IUS."
     rm -f "${GET_IUS}" || warning "Temporary setup.ius.io file could not be removed."
-    if [[ ${CI:-} != "$(command true)" ]] && [[ ${TRAVIS:-} != "$(command true)" ]]; then
+    if [[ ${CI:-} != true ]] && [[ ${TRAVIS:-} != true ]]; then
         info "Upgrading packages. Please be patient, this can take a while."
         yum -y upgrade > /dev/null 2>&1 || fatal "Failed to upgrade packages from yum."
     fi
