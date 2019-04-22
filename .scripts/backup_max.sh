@@ -15,17 +15,17 @@ backup_max() {
         local FILENAME=${APPNAME,,}
         local BACKUP_CONFIG
         BACKUP_CONFIG=$(run_script 'env_get' "${APPNAME}_BACKUP_CONFIG")
-        if [[ ${BACKUP_CONFIG} != false ]]; then
+        if [[ ${BACKUP_CONFIG} != "$(command false)" ]]; then
             local BACKUP_CMD_PRE_APP
             BACKUP_CMD_PRE_APP=$(run_script 'env_get' BACKUP_CMD_PRE_APP)
             eval "${BACKUP_CMD_PRE_APP}" || error "Failed to execute BACKUP_CMD_PRE_APP."
             local RUNNING
             RUNNING=$(docker inspect "${FILENAME}" 2> /dev/null | grep -Po '"Running": \Ktrue' || echo "false")
-            if [[ ${RUNNING} == true ]]; then
+            if [[ ${RUNNING} == "$(command true)" ]]; then
                 docker stop "${FILENAME}" > /dev/null 2>&1 || error "Unable to stop ${FILENAME}."
             fi
             run_script 'backup_create' "${FILENAME}" || return 1
-            if [[ ${RUNNING} == true ]]; then
+            if [[ ${RUNNING} == "$(command true)" ]]; then
                 docker start "${FILENAME}" > /dev/null 2>&1 || error "Unable to start ${FILENAME}."
             fi
             local BACKUP_CMD_POST_APP

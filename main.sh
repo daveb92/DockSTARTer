@@ -44,7 +44,7 @@ usage() {
 readonly ARGS=("$@")
 
 # Github Token for Travis CI
-if [[ ${CI:-} == true ]] && [[ ${TRAVIS:-} == true ]] && [[ ${TRAVIS_SECURE_ENV_VARS:-} == true ]]; then
+if [[ ${CI:-} == "$(command true)" ]] && [[ ${TRAVIS:-} == "$(command true)" ]] && [[ ${TRAVIS_SECURE_ENV_VARS:-} == "$(command true)" ]]; then
     readonly GH_HEADER="Authorization: token ${GH_TOKEN}"
 fi
 
@@ -65,13 +65,13 @@ readonly SCRIPTNAME="${SCRIPTPATH}/$(basename "$(get_scriptname)")"
 
 # User/Group Information
 readonly DETECTED_PUID=${SUDO_UID:-$UID}
-readonly DETECTED_UNAME=$(id -un "${DETECTED_PUID}" 2> /dev/null || true)
-readonly DETECTED_PGID=$(id -g "${DETECTED_PUID}" 2> /dev/null || true)
-readonly DETECTED_UGROUP=$(id -gn "${DETECTED_PUID}" 2> /dev/null || true)
-readonly DETECTED_HOMEDIR=$(eval echo "~${DETECTED_UNAME}" 2> /dev/null || true)
+readonly DETECTED_UNAME=$(id -un "${DETECTED_PUID}" 2> /dev/null || command true)
+readonly DETECTED_PGID=$(id -g "${DETECTED_PUID}" 2> /dev/null || command true)
+readonly DETECTED_UGROUP=$(id -gn "${DETECTED_PUID}" 2> /dev/null || command true)
+readonly DETECTED_HOMEDIR=$(eval echo "~${DETECTED_UNAME}" 2> /dev/null || command true)
 
 # Terminal Colors
-if [[ -t 1 ]] || [[ ${TRAVIS:-} == true ]]; then
+if [[ -t 1 ]] || [[ ${TRAVIS:-} == "$(command true)" ]]; then
     # Reference for colornumbers used by most terminals can be found here: https://jonasjacek.github.io/colors/
     # The actual color depends on the color scheme set by the current terminal-emulator
     # For capabilities, see terminfo(5)
@@ -91,7 +91,7 @@ readonly NC="${NC:-}"
 
 # Log Functions
 readonly LOG_FILE="/tmp/dockstarter.log"
-sudo chown "${DETECTED_PUID:-$DETECTED_UNAME}":"${DETECTED_PGID:-$DETECTED_UGROUP}" "${LOG_FILE}" > /dev/null 2>&1 || true
+sudo chown "${DETECTED_PUID:-$DETECTED_UNAME}":"${DETECTED_PGID:-$DETECTED_UGROUP}" "${LOG_FILE}" > /dev/null 2>&1 || command true
 info() { echo -e "${NC}$(date +"%F %T") ${BLU}[INFO]${NC}       $*${NC}" | tee -a "${LOG_FILE}" >&2; }
 warning() { echo -e "${NC}$(date +"%F %T") ${YLW}[WARNING]${NC}    $*${NC}" | tee -a "${LOG_FILE}" >&2; }
 error() { echo -e "${NC}$(date +"%F %T") ${RED}[ERROR]${NC}      $*${NC}" | tee -a "${LOG_FILE}" >&2; }
@@ -162,7 +162,7 @@ cleanup() {
     if repo_exists; then
         sudo chmod +x "${SCRIPTNAME}" > /dev/null 2>&1 || fatal "ds must be executable."
     fi
-    if [[ ${CI:-} == true ]] && [[ ${TRAVIS:-} == true ]] && [[ ${TRAVIS_SECURE_ENV_VARS:-} == false ]]; then
+    if [[ ${CI:-} == "$(command true)" ]] && [[ ${TRAVIS:-} == "$(command true)" ]] && [[ ${TRAVIS_SECURE_ENV_VARS:-} == "$(command false)" ]]; then
         warning "TRAVIS_SECURE_ENV_VARS is false for Pull Requests from remote branches. Please retry failed builds!"
     fi
 
@@ -187,7 +187,7 @@ main() {
     fi
     local PROMPT
     local DS_COMMAND
-    DS_COMMAND="$(command -v ds || true)"
+    DS_COMMAND="$(command -v ds || command true)"
     if [[ -L ${DS_COMMAND} ]]; then
         local DS_SYMLINK
         DS_SYMLINK="$(readlink -f "${DS_COMMAND}")"
@@ -198,7 +198,7 @@ main() {
                 fi
                 if run_script 'question_prompt' N "DockSTARTer installation found at ${DS_SYMLINK} location. Would you like to run ${SCRIPTNAME} instead?"; then
                     run_script 'symlink_ds'
-                    DS_COMMAND="$(command -v ds || true)"
+                    DS_COMMAND="$(command -v ds || command true)"
                     DS_SYMLINK="$(readlink -f "${DS_COMMAND}")"
                 fi
                 unset PROMPT

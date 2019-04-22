@@ -20,7 +20,7 @@ install_docker() {
     if vergt "${AVAILABLE_DOCKER}" "${INSTALLED_DOCKER}" || [[ -n ${FORCE} ]]; then
         if [[ -n "$(command -v snap)" ]]; then
             info "Removing snap Docker package."
-            snap remove docker > /dev/null 2>&1 || true
+            snap remove docker > /dev/null 2>&1 || command true
         fi
         info "Installing latest docker. Please be patient, this can take a while."
         local GET_DOCKER

@@ -19,14 +19,14 @@ run_yum() {
         python-cryptography \
         python3-cryptography \
         python36 \
-        python36-pip > /dev/null 2>&1 || true
+        python36-pip > /dev/null 2>&1 || command true
     info "Installing EPEL and IUS repositories."
     local GET_IUS
     GET_IUS="$(mktemp)"
     curl -fsSL setup.ius.io -o "${GET_IUS}" > /dev/null 2>&1 || fatal "Failed to get IUS install script."
     bash "${GET_IUS}" > /dev/null 2>&1 || warning "Failed to install IUS."
     rm -f "${GET_IUS}" || warning "Temporary setup.ius.io file could not be removed."
-    if [[ ${CI:-} != true ]] && [[ ${TRAVIS:-} != true ]]; then
+    if [[ ${CI:-} != "$(command true)" ]] && [[ ${TRAVIS:-} != "$(command true)" ]]; then
         info "Upgrading packages. Please be patient, this can take a while."
         yum -y upgrade > /dev/null 2>&1 || fatal "Failed to upgrade packages from yum."
     fi

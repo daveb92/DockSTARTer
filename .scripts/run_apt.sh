@@ -11,10 +11,10 @@ run_apt() {
         docker-engine \
         docker.io \
         python-cryptography \
-        python3-cryptography > /dev/null 2>&1 || true
+        python3-cryptography > /dev/null 2>&1 || command true
     info "Updating repositories."
     apt-get -y update > /dev/null 2>&1 || fatal "Failed to get updates from apt."
-    if [[ ${CI:-} != true ]] && [[ ${TRAVIS:-} != true ]]; then
+    if [[ ${CI:-} != "$(command true)" ]] && [[ ${TRAVIS:-} != "$(command true)" ]]; then
         info "Upgrading packages. Please be patient, this can take a while."
         apt-get -y dist-upgrade > /dev/null 2>&1 || fatal "Failed to upgrade packages from apt."
     fi

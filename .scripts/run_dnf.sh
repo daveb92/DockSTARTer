@@ -17,8 +17,8 @@ run_dnf() {
         docker-engine-selinux \
         docker-engine \
         python-cryptography \
-        python3-cryptography > /dev/null 2>&1 || true
-    if [[ ${CI:-} != true ]] && [[ ${TRAVIS:-} != true ]]; then
+        python3-cryptography > /dev/null 2>&1 || command true
+    if [[ ${CI:-} != "$(command true)" ]] && [[ ${TRAVIS:-} != "$(command true)" ]]; then
         info "Upgrading packages. Please be patient, this can take a while."
         dnf -y upgrade --refresh > /dev/null 2>&1 || fatal "Failed to upgrade packages from dnf."
     fi

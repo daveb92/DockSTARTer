@@ -22,9 +22,9 @@ install_compose() {
         run_script 'run_python' -m pip install -IUq pip > /dev/null 2>&1 || warning "Failed to install pip from pip. This can be ignored for now."
 
         info "Removing old docker-compose."
-        rm /usr/local/bin/docker-compose > /dev/null 2>&1 || true
-        rm /usr/bin/docker-compose > /dev/null 2>&1 || true
-        run_script 'run_python' -m pip uninstall docker-py > /dev/null 2>&1 || true
+        rm /usr/local/bin/docker-compose > /dev/null 2>&1 || command true
+        rm /usr/bin/docker-compose > /dev/null 2>&1 || command true
+        run_script 'run_python' -m pip uninstall docker-py > /dev/null 2>&1 || command true
 
         info "Installing latest docker-compose."
         run_script 'run_python' -m pip install -IUq setuptools > /dev/null 2>&1 || warning "Failed to install setuptools from pip. This can be ignored for now."

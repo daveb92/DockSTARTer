@@ -28,7 +28,7 @@ install_yq() {
         if [[ ! -L "/usr/bin/yq" ]]; then
             ln -s /usr/local/bin/yq /usr/bin/yq || fatal "Failed to create /usr/bin/yq symlink."
         fi
-        chmod +x /usr/local/bin/yq > /dev/null 2>&1 || true
+        chmod +x /usr/local/bin/yq > /dev/null 2>&1 || command true
         local UPDATED_YQ
         UPDATED_YQ=$( (yq --version 2> /dev/null || echo "0") | sed -E 's/.* version ([^,]*)(, build .*)?/\1/')
         if vergt "${AVAILABLE_YQ}" "${UPDATED_YQ}"; then

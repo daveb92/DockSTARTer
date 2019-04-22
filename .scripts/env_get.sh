@@ -4,7 +4,7 @@ IFS=$'\n\t'
 
 env_get() {
     local GET_VAR=${1:-}
-    grep --color=never -Po "^${GET_VAR}=\K.*" "${SCRIPTPATH}/compose/.env" || true
+    grep --color=never -Po "^${GET_VAR}=\K.*" "${SCRIPTPATH}/compose/.env" || command true
 }
 
 test_env_get() {
