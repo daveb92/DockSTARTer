@@ -9,7 +9,7 @@ For Logarr you will need to edit the config.php file to point to the correct log
 
 Edit the included config to change these lines:
 ```
-    "Sonarr" => '/var/log/logarrlogs//sonarr/logs/sonarr.txt',
+    "Sonarr" => '/var/log/logarrlogs/sonarr/logs/sonarr.txt',
 
     "Radarr" => '/var/log/logarrlogs/radarr/logs/radarr.txt',
 
